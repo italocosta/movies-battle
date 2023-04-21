@@ -2,6 +2,7 @@ package com.ada.moviesbattle.controller;
 
 import com.ada.moviesbattle.QuizApi;
 import com.ada.moviesbattle.model.api.Quiz;
+import com.ada.moviesbattle.model.api.SingleStringResponse;
 import com.ada.moviesbattle.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class QuizController implements QuizApi {
     }
 
     @Override
-    public ResponseEntity<String> replyQuiz(Integer selectedOption) {
-        return ResponseEntity.ok(service.validateQuizReply(selectedOption,getUsername()) ? "Correct answer!" : "Incorrect answer!");
+    public ResponseEntity<SingleStringResponse> replyQuiz(Integer selectedOption) {
+        return ResponseEntity.ok(new SingleStringResponse().message(service.validateQuizReply(selectedOption,getUsername()) ? "Correct answer!" : "Incorrect answer!"));
     }
 }

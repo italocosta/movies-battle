@@ -28,9 +28,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Game'
         '400':
-          description: You already have a session running up. Please, stop the current one or continue playing with that.
-        '403':
-          description: User not found
+          description: You already have a game session up and running. Please, stop the current one or continue playing with that.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
     delete:
@@ -47,9 +55,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Game'
         '400':
-          description: You don't have any session running up. Please, start a new one.
-        '403':
-          description: User not found
+          description: You don't have any game session up and running. Please, start a new one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
     get:
@@ -66,9 +82,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Game'
         '400':
-          description: You don't have any session running up. Please, start a new one.
-        '403':
-          description: User not found
+          description: You don't have any game session up and running. Please, start a new one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
   /games/ranking:
@@ -86,8 +110,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Ranking'
-        '403':
-          description: User not found
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
   /quizzes:
@@ -106,9 +134,17 @@ paths:
                 items:
                   $ref: '#/components/schemas/Quiz'
         '400':
-          description: You don't have any session running up. Please, start a new one.
-        '403':
-          description: User not found
+          description: You don't have any game session up and running. Please, start a new one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
     post:
@@ -127,14 +163,21 @@ paths:
         '200':
           description: successful operation
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
-                example: Incorrect answer!
+                $ref: '#/components/schemas/SingleStringResponse'
         '400':
-          description: You don't have any quiz waiting for your reply. Please, start a new one.
-        '403':
-          description: User not found
+          description: You don't have any active Quiz. Please, initiate a new one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
+        '401':
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleStringResponse'
       security:
         - moviesbattle_auth: []
 components:
@@ -187,6 +230,12 @@ components:
         title:
           type: string
           example: The Godfather
+    SingleStringResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Some message.
   securitySchemes:
     moviesbattle_auth:
       type: http

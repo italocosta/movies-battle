@@ -36,7 +36,7 @@ public class QuizService {
 
     public boolean validateQuizReply(int selectedOption, String user) {
         Quiz quiz = getActiveQuiz(user)
-                .orElseThrow(() -> new IllegalStateException("You don't have any session running up. Please, start a new one."));
+                .orElseThrow(() -> new IllegalStateException("You don't have any active Quiz. Please, initiate a new one."));
         boolean correctAnswer = getHighestRatedMovie(quiz).equals(getSelectedMovie(quiz, selectedOption));
         quiz.setAnswer(selectedOption);
         quiz.setCorrect(correctAnswer);

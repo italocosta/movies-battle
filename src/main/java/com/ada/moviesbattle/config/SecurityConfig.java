@@ -1,7 +1,10 @@
 package com.ada.moviesbattle.config;
 
+import com.ada.moviesbattle.model.api.SingleStringResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Configuration
 @EnableWebSecurity
@@ -45,22 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             @ExceptionHandler(value = {AuthenticationException.class})
             public void commence(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException authException) throws
                     IOException, ServletException {
-                // 401
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
-            }
-
-            @SuppressWarnings("UnusedParameters")
-            @ExceptionHandler(value = {AccessDeniedException.class})
-            public void commence(final HttpServletRequest request, final HttpServletResponse response, final AccessDeniedException accessDeniedException) throws IOException {
-                // 403
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
-            }
-
-            @SuppressWarnings("UnusedParameters")
-            @ExceptionHandler(value = {Exception.class})
-            public void commence(final HttpServletRequest request, final HttpServletResponse response, final Exception exception) throws IOException {
-                // 500
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, exception.getMessage());
+                response.setHeader("WWW-Authenticate","");
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                OutputStream responseStream = response.getOutputStream();
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.writeValue(responseStream, new SingleStringResponse().message("Authentication failed"));
+                responseStream.flush();
             }
         };
     }
@@ -68,8 +63,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.inMemoryAuthentication()
-            .withUser("italo")
-            .password("{noop}italo")
+            .withUser("user")
+            .password("{noop}user")
+            .roles("USER")
+            .and()
+            .withUser("admin")
+            .password("{noop}admin")
             .roles("USER");
     }
 }

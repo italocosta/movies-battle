@@ -29,7 +29,7 @@ public class GameService {
     public com.ada.moviesbattle.model.api.Game startGame(String user) {
         try {
             findActiveGame(user);
-            throw new IllegalStateException("You already have a session running up. Please, stop the current one or continue playing with that.");
+            throw new IllegalStateException("You already have a game session up and running. Please, stop the current one or continue playing with that.");
         } catch (NoEntityFoundException ex) {
             Game game = Game.builder()
                     .user(user)
@@ -89,7 +89,7 @@ public class GameService {
 
     public Game findActiveGame(String user) {
         return repository.findByUserAndStatus(user, GameStatus.RUNNING)
-                .orElseThrow(() -> new NoEntityFoundException("You don't have any session running up. Please, start a new one."));
+                .orElseThrow(() -> new NoEntityFoundException("You don't have any game session up and running. Please, start a new one."));
     }
 
     public int getAmountWrongQuizAnswer(Game game) {
