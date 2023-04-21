@@ -127,13 +127,12 @@ paths:
         '200':
           description: successful operation
           content:
-            application/json:
+            text/plain:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Quiz'
+                type: string
+                example: Incorrect answer!
         '400':
-          description: You don't have any session running up. Please, start a new one.
+          description: You don't have any quiz waiting for your reply. Please, start a new one.
         '403':
           description: User not found
       security:
@@ -147,9 +146,9 @@ components:
           type: string
           example: italo.costa
         score:
-          type: integer
-          format: int32
-          example: 1000
+          type: number
+          format: float
+          example: 4.0
     Game:
       type: object
       properties:
@@ -157,14 +156,14 @@ components:
           type: string
           example: italo.costa
         score:
-          type: integer
-          format: int32
-          example: 1000
+          type: number
+          format: float
+          example: 5.4
         amountCorrectQuiz:
           type: integer
           format: int32
           example: 12
-        1mountWrongQuiz:
+        amountWrongQuiz:
           type: integer
           format: int32
           example: 2
